@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earth's Age Clock</title>
+    <style>
+        @font-face {
+    font-family: 'SuisseIntl';
+    src: url('SuisseIntl-Thin.woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffffff;
+            color: #111111;
+        }
+
+        #clock {
+            font-family: 'SuisseIntl', sans-serif;
+            font-weight: 100;
+            font-size: 80pt;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="clock">00.00.00.00.00</div>
+
+    <script>
+        // Earth is approximately 4.54 billion years old
+        const EARTH_YEARS = 4_540_000_000;
+        const SECONDS_PER_YEAR = 31_557_600; // Average seconds in a year
+        const EARTH_TOTAL_SECONDS = EARTH_YEARS * SECONDS_PER_YEAR;
+
+        // Calculate the total seconds since Earth's inception
+        const startTime = new Date().getTime(); // Start reference point
+
+        function updateClock() {
+            const now = new Date().getTime();
+            const elapsedTime = Math.floor((now - startTime) / 1000); // Elapsed seconds
+            const totalSeconds = EARTH_TOTAL_SECONDS + elapsedTime;
+
+            // Calculate time components
+            const years = Math.floor(totalSeconds / SECONDS_PER_YEAR);
+            const remainingSecondsAfterYears = totalSeconds % SECONDS_PER_YEAR;
+
+            const days = Math.floor(remainingSecondsAfterYears / 86400);
+            const remainingSecondsAfterDays = remainingSecondsAfterYears % 86400;
+
+            const hours = Math.floor(remainingSecondsAfterDays / 3600);
+            const remainingSecondsAfterHours = remainingSecondsAfterDays % 3600;
+
+            const minutes = Math.floor(remainingSecondsAfterHours / 60);
+            const seconds = remainingSecondsAfterHours % 60;
+
+            // Format the clock output
+            const formattedClock = `
+                ${years.toString().padStart(2, '0')}.${
+                    days.toString().padStart(2, '0')}.${
+                    hours.toString().padStart(2, '0')}.${
+                    minutes.toString().padStart(2, '0')}.${
+                    seconds.toString().padStart(2, '0')}`;
+
+            document.getElementById('clock').textContent = formattedClock;
+        }
+
+        // Start the clock
+        setInterval(updateClock, 1000);
+    </script>
+</body>
+</html>
